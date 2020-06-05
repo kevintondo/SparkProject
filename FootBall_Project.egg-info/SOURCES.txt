@@ -1,0 +1,8 @@
+README.md
+setup.py
+FootBall_Project.egg-info/PKG-INFO
+FootBall_Project.egg-info/SOURCES.txt
+FootBall_Project.egg-info/dependency_links.txt
+FootBall_Project.egg-info/requires.txt
+FootBall_Project.egg-info/top_level.txt
+src/__init__.py
