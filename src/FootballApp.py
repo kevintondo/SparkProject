@@ -24,9 +24,9 @@ def main(argv):
     
     #Filtrer et garder uniquement les matchs datant de mars 1980 à aujourd’hui
     dframe = filtrer_match_recent(dframe)
-    
     dframe.show()
     
+    #Exercice 2
     # Création colonne boolean indiquant pour chaque ligne si le match a été joué à domicile (true) ou pas (false)
     dframe_a_domicile = a_domicile(dframe)
     dframe_a_domicile.show()
@@ -35,6 +35,17 @@ def main(argv):
     #Appel à la fonction d'aggrégation
     dframe_statistiques = statistiques(dframe_a_domicile)
     dframe_statistiques.show()
+    
+    
+    #Ecrire le résultat dans un fichier parquet nommé stats.parquet
+    ecrire_dans_un_fichier_parquet_file(dframe_statistiques, 'stats.parquet')
+    
+    #Exercice 3
+    #Jointure
+    df_jointure = join_df(dframe, dframe_statistiques)
+    df_jointure.show()
+    ecrire_dans_un_fichier_parquet_file(df_jointure, 'results.parquet')
+    
     
 #Fonction pour lire le fichier csv dans une dataframe    
 def import_du_csv_match():
@@ -49,7 +60,6 @@ def renommer_les_colonnes(dframe):
     df = dframe.withColumnRenamed('X4', 'match')
     df = df.withColumnRenamed('X6', 'competition')
     return df
-
 
 
 #Selectionner les colonnes
@@ -108,6 +118,20 @@ def statistiques(dframe):
     )
     )
     return df
+
+#Fonction pour ecrire sur un fichier parquet
+def ecrire_dans_un_fichier_parquet_file(df, file_name):
+    df.write.mode("overwrite").parquet(file_name)
+
+    
+def join_df(df1, df2):
+    df2 = df2.withColumnRenamed("adversaire", "adversaire_name")
+
+    joined_df = df1.join(
+        df2, df1.adversaire == df2.adversaire_name
+    )
+    joined_df = joined_df.drop('adversaire_name')
+    return joined_df
 
 
 if __name__ == "__main__":

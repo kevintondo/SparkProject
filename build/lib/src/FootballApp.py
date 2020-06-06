@@ -36,6 +36,10 @@ def main(argv):
     dframe_statistiques = statistiques(dframe_a_domicile)
     dframe_statistiques.show()
     
+    
+    #Ecrire le résultat dans un fichier parquet nommé stats.parquet
+    ecrire_dans_un_fichier_parquet_file(dframe_statistiques, 'stats.parquet')
+    
 #Fonction pour lire le fichier csv dans une dataframe    
 def import_du_csv_match():
     
@@ -109,6 +113,9 @@ def statistiques(dframe):
     )
     return df
 
+#Fonction pour ecrire sur un fichier parquet
+def ecrire_dans_un_fichier_parquet_file(df, file_name):
+    df.write.mode("overwrite").parquet(file_name)
 
 if __name__ == "__main__":
     main(sys.argv)
